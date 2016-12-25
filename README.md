@@ -1,5 +1,5 @@
 # Nimbus
-Magpie is a script that fetches updates from [MSS' 'rain area' data](http://www.weather.gov.sg/weather-rain-area-50km/) and pushes them to twitter. An implementation of this script can be found [@SGRaincloud](https://twitter.com/SGRaincloud).
+Nimbus is a script that fetches updates from [MSS' 'rain area' data](http://www.weather.gov.sg/weather-rain-area-50km/) and pushes them to twitter. An implementation of this script can be found [@SGRaincloud](https://twitter.com/SGRaincloud).
 
 ## Non-Standard Dependencies
 - [Requests, `requests`](https://github.com/kennethreitz/requests)
