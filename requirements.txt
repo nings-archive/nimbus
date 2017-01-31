@@ -1,0 +1,12 @@
+# NIMBUS
+# ======
+# REQUIREMENTS
+# ------------
+# Install via,
+# $ sudo pip install -r requirements.txt
+
+requests
+bs4
+tweepy
+pillow
+imageio
