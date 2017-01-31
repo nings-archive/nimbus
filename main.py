@@ -44,7 +44,7 @@ if not os.path.isfile(HISTORY_PATH):
     with open(HISTORY_PATH, 'w', newline='') as file:
         # CSV in the format datetime, rain percent, tweet id(?)
         writer = csv.writer(file)
-        writer.writerow(['datetime', 'rain%', 'tweet-id'])
+        writer.writerow(['nil', '0', '0'])
 if not os.path.isdir(MAP_HISTORY_PATH):
     os.makedirs(MAP_HISTORY_PATH)
 
