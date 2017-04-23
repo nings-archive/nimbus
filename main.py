@@ -2,31 +2,22 @@
 nimbus
 @ningOTI, ningyuan.sg@gmail.com
 '''
-# LIBRARIES
-# misc libraries
 import os, sys, time, csv, json, logging
-# web data libraries
-import requests, bs4
-# twitter library
-import tweepy
-# image manipulation libraries
+import requests, bs4, tweepy, imageio
 from PIL import Image, ImageFont, ImageDraw
-import imageio
 
-# CONSTANT VALUES
 PATH = sys.path[0] + '/'
 RESOURCES_PATH = PATH + 'resources/'
 FONT_PATH = RESOURCES_PATH + 'Aileron-Regular.otf'
+MASK_PATH = RESOURCES_PATH + 'mask.png'
 LEGEND_PATH = RESOURCES_PATH + 'legend.png'
 TOWNSHIPMAP_PATH = RESOURCES_PATH + 'townshipmap_compressed.png'
-MASK_PATH = RESOURCES_PATH + 'mask.png'
-HISTORY_PATH = PATH + 'history.csv'
 CONFIG_PATH = PATH + 'config.json'
+HISTORY_PATH = PATH + 'history.csv'
 OVERLAY_PATH = PATH + 'overlay.png'
 OVERLAID_PATH = PATH + 'overlaid.png'
 MAP_HISTORY_PATH = PATH + 'map_histories/'
 
-# LOGGING CONFIGURATION
 logging.basicConfig(
         filename=PATH+'sgraincloud.log',
         level=logging.WARNING,
@@ -35,11 +26,12 @@ logging.basicConfig(
 logging.getLogger('requests').setLevel(logging.WARNING)
 logging.getLogger('tweepy').setLevel(logging.WARNING)
 
-# SCRIPT INITIATION (history.csv)
-assert os.path.isfile(FONT_PATH)         # compulsory--font file Aileron-Regular.otf
+assert os.path.isfile(FONT_PATH)         # compulsory--font @ resources/Aileron-Regular.otf
+assert os.path.isfile(MASK_PATH)         # compulsory--mask @ resources/mask.png
 assert os.path.isfile(LEGEND_PATH)       # compulsory--legend @ resources/legend.png
 assert os.path.isfile(TOWNSHIPMAP_PATH)  # compulsory--bare map @ resources/townshipmap_compressed.png
-assert os.path.isfile(MASK_PATH)         # compulsory--mask @ resources/mask.png
+
+# SCRIPT INITIATION (history.csv)
 if not os.path.isfile(HISTORY_PATH):
     with open(HISTORY_PATH, 'w', newline='') as file:
         # CSV in the format datetime, rain percent, tweet id(?)
@@ -69,8 +61,8 @@ if not os.path.isfile(CONFIG_PATH):
     quit()
 else:
     with open(CONFIG_PATH, 'r') as file:
-        file_dumb = file.read()
-        config_json = json.loads(file_dumb)
+        file_dump = file.read()
+        config_json = json.loads(file_dump)
 
 class weathergov:
     def __init__(self):
@@ -154,12 +146,6 @@ class SGRC_API():
         return self.API.user_timeline(self.bot_id, count=1)[0].id
 
 
-class praw_API():
-    def __init__(self):
-        self.username = config_json['reddit_username']
-        self.password = config_json['reddit_password']
-
-
 class Image_Handler():
     def __init__(self):
         self.sgmap = Image.open(TOWNSHIPMAP_PATH)
@@ -219,7 +205,6 @@ class Image_Handler():
         return opaque_pixel_count / total_pixel_count
 
     def gen_gif(self, datetime_list, export_name):
-#        kwargs_read = {'ignoregamma':True}  # default false, no effect
         kwargs_write = {'fps':7.5,
                 'quantizer':'nq',  # default wu, but nq works better
                 'palettesize': 16}  # default 256 (max), but file size too large
